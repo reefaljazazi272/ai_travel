@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Petra",
+    "country": "Jordan",
+    "description": "An ancient city carved into rose-red cliffs, famous for its rock-cut architecture.",
+    "category": "Culture"
+  },
+  {
+    "name": "Kyoto",
+    "country": "Japan",
+    "description": "Known for its classical Buddhist temples, gardens, and imperial palaces.",
+    "category": "Culture"
+  },
+  {
+    "name": "Santorini",
+    "country": "Greece",
+    "description": "Stunning volcanic island featuring white-washed houses and blue-domed churches.",
+    "category": "Beach"
+  }
+]
