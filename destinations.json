@@ -16,5 +16,65 @@
     "country": "Greece",
     "description": "Stunning volcanic island featuring white-washed houses and blue-domed churches.",
     "category": "Beach"
+  },
+  {
+    "name": "Machu Picchu",
+    "country": "Peru",
+    "description": "An ancient Incan citadel set high in the Andes Mountains, known for its dry-stone walls.",
+    "category": "History"
+  },
+  {
+    "name": "Paris",
+    "country": "France",
+    "description": "The city of light, famous for the Eiffel Tower, world-class museums, and romantic cafes.",
+    "category": "City"
+  },
+  {
+    "name": "Bali",
+    "country": "Indonesia",
+    "description": "Tropical paradise known for its forested volcanic mountains and iconic rice paddies.",
+    "category": "Nature"
+  },
+  {
+    "name": "Rome",
+    "country": "Italy",
+    "description": "A cosmopolitan city with nearly 3,000 years of globally influential art and architecture.",
+    "category": "History"
+  },
+  {
+    "name": "Cairo",
+    "country": "Egypt",
+    "description": "Home to the Giza Pyramid Complex and the Great Sphinx, rich in ancient history.",
+    "category": "History"
+  },
+  {
+    "name": "Swiss Alps",
+    "country": "Switzerland",
+    "description": "Breathtaking mountain range offering world-class skiing, hiking, and alpine scenery.",
+    "category": "Mountains"
+  },
+  {
+    "name": "Great Barrier Reef",
+    "country": "Australia",
+    "description": "The world's largest coral reef system, perfect for diving and exploring marine life.",
+    "category": "Nature"
+  },
+  {
+    "name": "New York City",
+    "country": "USA",
+    "description": "Known for its iconic skyscrapers, Broadway shows, and diverse culture.",
+    "category": "City"
+  },
+  {
+    "name": "Cape Town",
+    "country": "South Africa",
+    "description": "A port city beneath the imposing Table Mountain, offering beaches and nature.",
+    "category": "Nature"
+  },
+  {
+    "name": "Reykjavik",
+    "country": "Iceland",
+    "description": "Coastal capital known for the Northern Lights, geothermal spas, and dramatic landscapes.",
+    "category": "Nature"
   }
 ]

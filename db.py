@@ -1,26 +1,25 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, ARRAY, Float
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import os
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
+from dotenv import load_dotenv
 
-DATABASE_URL = "postgresql://postgres:123456@127.0.0.1:5432/travel_rec_db"
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL not found. Check your .env file!")
 
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+metadata = MetaData()
 
-class Destination(Base):
-    __tablename__ = "destinations"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    country = Column(String(100), nullable=False)
-    description = Column(Text, nullable=False)
-    category = Column(String(50))
-    embedding = Column(ARRAY(Float)) 
+destinations = Table(
+    'destinations', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('name', String),
+    Column('country', String),
+    Column('description', String),
+    Column('category', String),
+    Column('embedding', String)
+)
 
 def init_db():
-    Base.metadata.create_all(bind=engine)
-
-if __name__ == "__main__":
-    init_db()
-    print("Database table created successfully!")
+    metadata.create_all(engine)

@@ -1,39 +1,30 @@
 import json
-from sqlalchemy.orm import Session
-from db import SessionLocal, Destination, init_db
+from db import engine, destinations, init_db
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
 def seed_from_json():
     init_db()
-    db: Session = SessionLocal()
-    
     with open('destinations.json', 'r') as f:
         data = json.load(f)
-    
-    try:
-        print("Save JSON DataSql ")
+
+    with engine.connect() as conn:
+        print(" Fall data core..")
         for item in data:
-            exists = db.query(Destination).filter(Destination.name == item['name']).first()
-            if not exists:
-                vector = model.encode(item['description']).tolist()
-                new_dest = Destination(
-                    name=item['name'],
-                    country=item['country'],
-                    description=item['description'],
-                    category=item['category'],
-                    embedding=vector
-                )
-                db.add(new_dest)
-        
-        db.commit()
-        print("JSON Successfully")
-    except Exception as e:
-        print(f"False: {e}")
-        db.rollback()
-    finally:
-        db.close()
+            vector = model.encode(item['description']).tolist()
+            postgres_vector = "{" + ",".join(map(str, vector)) + "}"
+            
+            ins = destinations.insert().values(
+                name=item['name'],
+                country=item['country'],
+                description=item['description'],
+                category=item['category'],
+                embedding=postgres_vector
+            )
+            conn.execute(ins)
+        conn.commit()
+        print("Success!")
 
 if __name__ == "__main__":
     seed_from_json()

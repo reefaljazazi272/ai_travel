@@ -1,27 +1,36 @@
-from sqlalchemy.orm import Session
-from db import SessionLocal, Destination
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+from sqlalchemy import select
+from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+# تأكد أن اسم الملف هو db.py أو قم بتغييره لاسم ملفك الصحيح
+from db import engine, destinations 
 
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
-def get_recommendation(user_query):
-    db: Session = SessionLocal()
-    
-    all_destinations = db.query(Destination).all()
-    
-    embeddings = np.array([d.embedding for d in all_destinations])
-    
-    query_vector = model.encode([user_query])
-    
-    similarities = cosine_similarity(query_vector, embeddings)[0]
-    best_index = np.argmax(similarities)
-    
-    result = all_destinations[best_index]
-    db.close()
-    return result, similarities[best_index]
+def get_recommendations(user_query, top_n=3):
+    with engine.connect() as conn:
+        stmt = select(destinations)
+        results = conn.execute(stmt).fetchall()
+        
+        if not results:
+            return [], []
 
-query = input("What's your dream trip? ")
-res, score = get_recommendation(query)
-print(f"Recommended: {res.name} | Score: {score:.2f}")
+        query_embedding = model.encode([user_query])
+        
+        db_vectors = []
+        for row in results:
+            # تنظيف النص وتحويله لمصفوفة أرقام (Vector)
+            clean_str = row.embedding.replace('{', '').replace('}', '')
+            vector = [float(x) for x in clean_str.split(',')]
+            db_vectors.append(vector)
+        
+        db_vectors = np.array(db_vectors)
+        similarities = cosine_similarity(query_embedding, db_vectors)[0]
+        
+        # الإصلاح هنا: استخدام argsort لجلب ترتيب أفضل 3 نتائج مختلفة
+        top_indices = np.argsort(similarities)[-top_n:][::-1]
+        
+        recs = [results[i] for i in top_indices]
+        scores = [similarities[i] for i in top_indices]
+        
+        return recs, scores
