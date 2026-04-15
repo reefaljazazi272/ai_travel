@@ -13,7 +13,7 @@ def seed_from_json():
         data = json.load(f)
     
     try:
-        print("جاري تحويل بيانات JSON وحفظها في قاعدة البيانات...")
+        print("Save JSON DataSql ")
         for item in data:
             exists = db.query(Destination).filter(Destination.name == item['name']).first()
             if not exists:
@@ -28,9 +28,9 @@ def seed_from_json():
                 db.add(new_dest)
         
         db.commit()
-        print("تمت عملية الاستيراد من JSON بنجاح! ✅")
+        print("JSON Successfully")
     except Exception as e:
-        print(f"حدث خطأ: {e}")
+        print(f"False: {e}")
         db.rollback()
     finally:
         db.close()
